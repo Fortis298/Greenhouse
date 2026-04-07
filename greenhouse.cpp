@@ -4,6 +4,12 @@
 
 #define DHTPIN 7
 #define DHTTYPE DHT11
+#define RELELEDPIN 8
+
+// Если реле работает наоборот поменяйте местами LOW и HIGH
+#define RELEON LOW
+#define RELEOFF HIGH
+
 DHT dht(DHTPIN, DHTTYPE);
 
 const int ra = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
@@ -61,6 +67,7 @@ char creators[] = "Uzetyx, Fortis";
 void setup() {
   lcd.begin(16, 2);
   dht.begin();
+  pinMode(RELELEDPIN, OUTPUT);
   
   for (int i = 0; hello[i] != '\0'; i++) {
     lcd.print(hello[i]);
@@ -127,6 +134,11 @@ void loop() {
   lcd.print(percentSoilMoisture, 1);
   lcd.print("%  ");
   
+  if (percentLight < 20) {
+    digitalWrite(RELELEDPIN, RELEON);
+  } else {
+    digitalWrite(RELELEDPIN, RELEOFF);
+  }
   
   delay(1000);
 }
